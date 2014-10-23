@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>  
+  <Resource name="jdbc/coffeeDB" 
+            auth="Container" 
+            type="javax.sql.DataSource" 
+            driverClassName="org.sqlite.JDBC"
+            url="jdbc:sqlite:/home/corey/Documents/cs9322/apache-tomcat-7.0.42/sqlite/coffeeDB.db"
+            factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory">
+  </Resource>
+</Context>
