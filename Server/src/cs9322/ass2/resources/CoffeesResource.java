@@ -44,7 +44,7 @@ public class CoffeesResource {
 			@FormParam("addition") String addition,
 			@HeaderParam("user") String user,
 			@Context HttpServletResponse servletResponse			
-			) throws IOException {
+			) throws IOException, ClassNotFoundException {
 
 		Response.Status stat = Response.Status.CREATED;
 		String error = "";
@@ -133,7 +133,7 @@ public class CoffeesResource {
 	// Get all orders
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getAllOrders(@HeaderParam("user") String user){
+	public Response getAllOrders(@HeaderParam("user") String user) throws ClassNotFoundException{
 
 		CoffeeOrderDAO coffeeDAO = new CoffeeOrderDAOImpl();
 		Response.Status stat = Response.Status.OK;

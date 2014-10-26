@@ -39,7 +39,7 @@ public class PaymentResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getPayment(@HeaderParam("user") String user){
+	public Response getPayment(@HeaderParam("user") String user) throws ClassNotFoundException{
 		
 		PaymentDAO paymentDAO = new PaymentDAOImpl();
 		Response.Status stat = Response.Status.OK;
@@ -83,7 +83,7 @@ public class PaymentResource {
 			@FormParam("cardNo") String cardNo,
 			@FormParam("expires") String expires,
 			@HeaderParam("user") String user
-			){
+			) throws ClassNotFoundException{
 
 		PaymentDAO paymentDAO = new PaymentDAOImpl();
 		Response.Status stat = Response.Status.OK;
@@ -156,7 +156,7 @@ public class PaymentResource {
 
 	@OPTIONS
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getOptions(@HeaderParam("user") String user){
+	public Response getOptions(@HeaderParam("user") String user) throws ClassNotFoundException{
 		
 		PaymentDAO paymentDAO = new PaymentDAOImpl();
 		HTTPOptions options = null;

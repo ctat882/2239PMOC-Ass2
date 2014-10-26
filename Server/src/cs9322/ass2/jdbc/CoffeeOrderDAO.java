@@ -15,7 +15,7 @@ public interface CoffeeOrderDAO {
 		
 	// Create a Coffee Order	
 	// Returns the ID of the order
-	public String createCoffeeOrder(CoffeeOrder order) throws SQLException; 
+	public String createCoffeeOrder(CoffeeOrder order) throws SQLException, ClassNotFoundException; 
 	
 	// Get a SINGLE Coffee Order	
 	public CoffeeOrder getCoffeeOrder(String id) throws EmptyException, SQLException;

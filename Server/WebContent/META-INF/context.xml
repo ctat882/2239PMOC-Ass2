@@ -3,8 +3,11 @@
   <Resource name="jdbc/coffeeDB" 
             auth="Container" 
             type="javax.sql.DataSource" 
-            driverClassName="org.sqlite.JDBC"
-            url="jdbc:sqlite:/home/corey/Documents/cs9322/apache-tomcat-7.0.42/sqlite/coffeeDB.db"
-            factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory">
+            username="ctat882"
+            password="password"
+            jdbc.driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://ctat882.srvr:3306/coffeeDB"
+            maxActive="15"
+            maxIdle="3">
   </Resource>
 </Context>

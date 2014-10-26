@@ -45,7 +45,7 @@ public class CoffeeResource {
 	// Get a Single Order
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getOrder(@HeaderParam("user") String user){
+	public Response getOrder(@HeaderParam("user") String user) throws ClassNotFoundException{
 		
 		CoffeeOrderDAO coffeeDAO = new CoffeeOrderDAOImpl();
 		Response.Status  status = Response.Status.OK;
@@ -87,7 +87,7 @@ public class CoffeeResource {
 			@FormParam("addition") String addition,			
 			@FormParam("status") String status,
 			@HeaderParam("user") String user
-			){
+			) throws ClassNotFoundException{
 		
 		Response.Status stat = Response.Status.OK;
 		String error = "";			
@@ -167,7 +167,7 @@ public class CoffeeResource {
 
 	// Delete a Single Order
 	@DELETE
-	public Response deleteOrder(@HeaderParam("user") String user){
+	public Response deleteOrder(@HeaderParam("user") String user) throws ClassNotFoundException{
 
 		CoffeeOrderDAO coffeeDAO = new CoffeeOrderDAOImpl();
 		Response.Status stat = Response.Status.NO_CONTENT;
@@ -203,7 +203,7 @@ public class CoffeeResource {
 
 	@OPTIONS
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getOptions(@HeaderParam("user") String user){
+	public Response getOptions(@HeaderParam("user") String user) throws ClassNotFoundException{
 		
 		CoffeeOrderDAO coffeeDAO = new CoffeeOrderDAOImpl();
 		Response.Status stat = Response.Status.OK;

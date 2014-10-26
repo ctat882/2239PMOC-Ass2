@@ -1,6 +1,7 @@
 package cs9322.ass2.jdbc;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,18 +20,20 @@ public class PaymentDAOImpl implements PaymentDAO {
 	DataSource ds;
 	Connection conn;
 
-	public PaymentDAOImpl(){
+	public PaymentDAOImpl() throws ClassNotFoundException{
 
 		try {
-			ctx = new InitialContext();
-			ds = (DataSource)ctx.lookup("java:comp/env/jdbc/coffeeDB");
-			conn = ds.getConnection();
+			
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://ctat882.srvr:3306/coffeeDB", "ctat882", "password");
+			
+			//ctx = new InitialContext();
+			//ds = (DataSource)ctx.lookup("java:comp/env/jdbc/coffeeDB");
+			//conn = ds.getConnection();
 
 		} catch(SQLException e){
 			System.out.println("Exception:" + e);	
-
-		} catch (NamingException ne) {
-			System.out.println("Exception: " + ne);								
+						
 
 		}
 	}

@@ -391,7 +391,7 @@ public class Controller  extends HttpServlet {
 	// (then the remainder of the path should contain 'rest/*')
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(
-				"http://localhost:8080/cs9322.ass2").build();
+				"http://ctat882.srvr:8080/RestServerOne").build();
 	}
 
 }
