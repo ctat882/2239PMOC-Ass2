@@ -62,10 +62,11 @@ public class CoffeesResource {
 		}
 		
 		
-		CoffeeOrderDAO coffeeDAO = new CoffeeOrderDAOImpl();
+		CoffeeOrderDAO coffeeDAO;
 
 		// If the user is not a customer, they may not create a new order.
 		try {
+			coffeeDAO = new CoffeeOrderDAOImpl();
 			// Coffee Type must be specified
 			if (coffeeType == null){
 				stat = Response.Status.BAD_REQUEST;
@@ -115,13 +116,18 @@ public class CoffeesResource {
 				// Add Next Links for a particular order to Database	
 				coffeeDAO.addNextURI(orderID , links);
 				order.setId(orderID);
+				coffeeDAO.closeConn();
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			stat = Response.Status.INTERNAL_SERVER_ERROR;
 		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		coffeeDAO.closeConn();
+		
 		if (stat.compareTo(Response.Status.CREATED) == 0)
 			return Response.status(stat).entity(order).build();
 		else if (error.isEmpty())

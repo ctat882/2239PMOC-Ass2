@@ -23,19 +23,12 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 
 	public CoffeeOrderDAOImpl() throws ClassNotFoundException{
 
-		try {
-			//ctx = new InitialContext();
-			//ds = (DataSource)ctx.lookup("java:comp/env/jdbc/coffeeDB");
+		try {		
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://ctat882.srvr:3306/coffeeDB", "ctat882", "password");
 			
-			//
-			System.out.println("AAAAAAAAAAAAAAAAA" + conn.isClosed());
-
 		} catch(SQLException e){
-			System.out.println("Exception:" + e);							
-		//} catch (NamingException ne) {
-
+			System.out.println("Exception:" + e);
 		}
 			
 	}
@@ -44,8 +37,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	public String createCoffeeOrder(CoffeeOrder order) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("AAAAAAAAAAAAAAAAA" + conn.isClosed());
-
 
 		String type = order.getType();
 		String cost = order.getCost();
@@ -67,7 +58,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 
 			// Get ID of last inserted order
 			ResultSet generatedKeys = stat.executeQuery("SELECT last_insert_id()");			
-			if (generatedKeys.next()) {				
+			if (generatedKeys.first()) {				
 				lastID = generatedKeys.getString(1);
 			}		
 
@@ -88,8 +79,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public Map<String, CoffeeOrder> getCoffeeOrders() throws SQLException{
 		
-		System.out.println("BBBBBBBBBBBBBBBB" + conn.isClosed());
-
 
 		Map<String, CoffeeOrder> result = new HashMap<String, CoffeeOrder>();
 
@@ -144,9 +133,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 		// TODO Auto-generated method stub
 
 		CoffeeOrder order = new CoffeeOrder();
-		
-		System.out.println("CCCCCCC" + conn.isClosed());
-
 		
 		// If Coffee Order doesn't exist, throw "EmptyException"												
 		if (!orderExists(orderID)){	
@@ -206,9 +192,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 		// TODO Auto-generated method stub
 		
 		
-		System.out.println("EEEEEEEEEEEEEE" + conn.isClosed());
-
-
 		CoffeeOrder order = new CoffeeOrder();
 
 		// If Coffee Order doesn't exist, throw "EmptyException"												
@@ -235,7 +218,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 			sql = "SELECT * FROM OrderNextLinks WHERE OrderID = " + "'" + orderID + "'";
 			stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-
 			// Only add payment links to the order
 			while (generatedKeys.next()) {
 				if (generatedKeys.getString(3).contains("payment")){				
@@ -244,13 +226,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 			}
 
 			order = getCoffeeOrder(orderID);
-			
-			//order.setLinks(nextLinks);								
-			//order.setType(type);
-			//order.setAddition(addition);
-			//order.setCost(cost);
-			//order.setStatus("unstarted");
-
+						
 			stat.close();			
 
 			return order;
@@ -268,9 +244,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public void deleteOrder(String id) throws EmptyException, SQLException, OrderStartedException {								
 		// TODO Auto-generated method stub
-		
-		System.out.println("FFFFFFFFFFFFFFFF" + conn.isClosed());
-
 
 		// If Coffee Order doesn't exist, throw "EmptyException"											
 		if (!orderExists(id)){ throw new EmptyException();}
@@ -299,8 +272,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	public void createPayment(String orderID, String amount, String paymentType) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("GGGGGGGGGGGGG" + conn.isClosed());
-
 		
 		try{
 			String sql = "INSERT INTO Payment (PaymentID,Amount,PaymentType)" + 
@@ -324,9 +295,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	public void addNextURI(String orderID, ArrayList<String> links) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("HHHHHHHHHHHHHHHH" + conn.isClosed());
 
-		
 		try{
 			for (int x = 0; x < links.size(); ++x){
 
@@ -352,8 +321,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public CoffeeOrder updateOrderStatus(String orderID, String status) throws EmptyException, SQLException, OrderStartedException, PaymentNotMadeException {
 		
-		System.out.println("IIIIIIIIIIIIIII" + conn.isClosed());
-
 		
 		// TODO Auto-generated method stub		
 
@@ -365,9 +332,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 			throw new PaymentNotMadeException();
 		}
 		
-		// if (status.contentEquals("cancelled") && orderStarted(orderID))
-		//	throw new OrderStartedException();
-		
+				
 		CoffeeOrder order = new CoffeeOrder();
 		
 
@@ -399,15 +364,13 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	public boolean orderExists(String orderID) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("JJJJJJJJJJJJJJJJJJJJJ" + conn.isClosed());
-
 
 		String sql = "SELECT ID FROM CoffeeOrder WHERE ID = " + "'" + orderID + "'";
 
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if (generatedKeys.next()){ return true;	}
+			if (generatedKeys.first()){ return true;	}
 			
 			return false;
 
@@ -423,9 +386,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public boolean paymentMade(String orderID) throws SQLException {
 		
-		System.out.println("KKKKKKKKKKKKKKKKKK" + conn.isClosed());
-
-		
 		
 		// TODO Auto-generated method stub
 		String sql = "SELECT PaymentType FROM Payment WHERE PaymentID = " + "'" + orderID + "'";
@@ -433,7 +393,10 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if (generatedKeys.getString(1).equals("pending")){ return false; }
+			if( generatedKeys.first()) {
+				if (generatedKeys.getString(1).equals("pending")){ return false; }
+			}
+			else throw new SQLException();
 			
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -446,18 +409,14 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 
 	@Override
 	public boolean orderStarted(String orderID) throws SQLException {
-		
-		System.out.println("LLLLLLLLLLLLLLLLL" + conn.isClosed());
-
-		
-		
+				
 		// TODO Auto-generated method stub
 		String sql = "SELECT Status FROM CoffeeOrder WHERE ID = " + "'" + orderID + "'";
 		
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if (generatedKeys.next()){
+			if (generatedKeys.first()){
 				if (generatedKeys.getString(1).equals("unstarted")){ return false; }
 			}
 			
@@ -472,8 +431,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public double getCoffeeCost(String coffeeName) throws SQLException {
 		
-		System.out.println("MMMMMMMMMMMMMMMM" + conn.isClosed());
-
 		
 		// TODO Auto-generated method stub
 		
@@ -484,10 +441,8 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if(generatedKeys.next()) {
-//			cost = (double)generatedKeys.getFloat(1);
+			if(generatedKeys.first()) {
 				cost = generatedKeys.getDouble(1);
-				System.out.println("cost = " + cost);
 			} 
 			
 		} catch (SQLException e){
@@ -501,10 +456,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public double getAdditionCost(String additionName) throws SQLException {
 		// TODO Auto-generated method stub
-		
-		System.out.println("NNNNNNNNNNNNNNNN" + conn.isClosed());
-
-		
+				
 		double cost = 0;
 		
 		String sql = "SELECT Cost FROM AdditionCost WHERE Addition = " + "'" + additionName + "'";
@@ -512,7 +464,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if (generatedKeys.next()){
+			if (generatedKeys.first()){
 				cost = generatedKeys.getDouble(1);
 			}
 			
@@ -528,15 +480,12 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	public boolean coffeeTypeExists(String coffeeType) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("OOOOOOOOOOOOOO" + conn.isClosed());
-
-		
 		String sql = "SELECT Coffee FROM CoffeeCost WHERE Coffee = " + "'" + coffeeType + "'";
 		
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if (generatedKeys.next()){ return true;	}
+			if (generatedKeys.first()){ return true;	}
 			
 			return false;
 
@@ -550,8 +499,6 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public boolean additionTypeExists(String additionType) throws SQLException {
 		
-		System.out.println("PPPPPPPPPPPPPPPPPPP" + conn.isClosed());
-
 		
 		// TODO Auto-generated method stub
 	String sql = "SELECT Addition FROM AdditionCost WHERE Addition = " + "'" + additionType + "'";
@@ -559,7 +506,7 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
-			if (generatedKeys.next()){ return true;	}
+			if (generatedKeys.first()){ return true;	}
 			
 			return false;
 
@@ -572,16 +519,13 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 
 	@Override
 	public HTTPOptions getOptions(String id) throws SQLException {
-		
-		System.out.println("QQQQQQQQQQQQ" + conn.isClosed());
-
-		
+				
 		String sql = "SELECT Status FROM CoffeeOrder WHERE ID = " + "'" + id + "'";
 		
 		Statement stat = conn.createStatement();
 		String status = "";
 		ResultSet generatedKeys = stat.executeQuery(sql);
-		if (generatedKeys.next()){
+		if (generatedKeys.first()){
 			status = generatedKeys.getString(1);
 		}
 		
@@ -605,14 +549,11 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public boolean userIsCustomer(String key) throws SQLException {
 		
-		//System.out.println("RRRRRRRRRRRRRR" + conn.isClosed());
-		
-		
 		String sql = "SELECT CustomerKey FROM Customer WHERE CustomerKey = " + "'" + key + "'";
 		Statement stat = conn.createStatement();
 		ResultSet generatedKeys = stat.executeQuery(sql);
 		
-		if (generatedKeys.next()){ return true; }
+		if (generatedKeys.first()){ return true; }
 		
 		return false;
 	}
@@ -620,14 +561,11 @@ public class CoffeeOrderDAOImpl implements CoffeeOrderDAO{
 	@Override
 	public boolean userIsBarista(String key) throws SQLException {
 		
-		System.out.println("SSSSSSSSSSSSSSSSSS" + conn.isClosed());
-
-		
 		String sql = "SELECT BaristaKey FROM Barista WHERE BaristaKey = " + "'" + key + "'";
 		Statement stat = conn.createStatement();
 		ResultSet generatedKeys = stat.executeQuery(sql);
 		
-		if (generatedKeys.next()){ return true; }
+		if (generatedKeys.first()){ return true; }
 		
 		return false;
 	}

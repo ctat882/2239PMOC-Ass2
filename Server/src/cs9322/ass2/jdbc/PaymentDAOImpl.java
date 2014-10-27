@@ -27,10 +27,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://ctat882.srvr:3306/coffeeDB", "ctat882", "password");
 			
-			//ctx = new InitialContext();
-			//ds = (DataSource)ctx.lookup("java:comp/env/jdbc/coffeeDB");
-			//conn = ds.getConnection();
-
 		} catch(SQLException e){
 			System.out.println("Exception:" + e);	
 						
@@ -42,8 +38,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 	@Override
 	public Payment getPayment(String paymentID) throws EmptyException, SQLException {
 		
-		System.out.println("TTTTTTTTTTTTTTT" + conn.isClosed());
-
 		
 		// TODO Auto-generated method stub
 		Payment payment = new Payment();
@@ -60,7 +54,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 				payment = new Payment(paymentID, amount, paymentType);
 
-				// If the payment has been made by card, get the card details too.								//******************** UNTESTED ******************
+				// If the payment has been made by card, get the card details too.								
 				if (paymentType.equals("card")){				
 					try {
 						sql = "SELECT * FROM CardDetails WHERE ID = " + "'" + paymentID + "'"; 
@@ -97,10 +91,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	@Override
 	public Payment makePayment(String orderID, String paymentType, String name, String cardNo, String expires) throws AlreadyExistsException, SQLException  {
-		
-		System.out.println("UUUUUUUUUUUUUUUUUUUU" + conn.isClosed());
-
-		
+				
 		Payment payment = new Payment();
 
 		// If payment has already been made, return error
@@ -134,7 +125,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 			// If the paymentType = "card", then add card details to "CardDetails" Table
 			if (paymentType.equals("card")){
 
-				String sql = "INSERT INTO CardDetails (ID,Name,CardNo,Expires)" +                                 // ADD PAYMENT ID AAAAAAAAAAAAAAAAAAAAAAAAARRRRGHHH
+				String sql = "INSERT INTO CardDetails (ID,Name,CardNo,Expires)" +                                 
 						" VALUES (" + "'" + orderID + "'" + "," + "'" + name + "'" + "," 
 						+ "'" + cardNo + "'" + "," 
 						+ "'" + expires  + "'" 
@@ -172,18 +163,18 @@ public class PaymentDAOImpl implements PaymentDAO {
 	@Override
 	public boolean paymentMade(String paymentID) throws SQLException {
 
-
-		System.out.println("VVVVVVVVVVVVVVVVV" + conn.isClosed());
-
 		String sql = "SELECT PaymentType FROM Payment WHERE PaymentID = " + "'" + paymentID + "'";
 
 		try {			
 			Statement stat = conn.createStatement();
 			ResultSet generatedKeys = stat.executeQuery(sql);
 			// If the payment is set to either "card" or "cash", then the payment has already been made
-			if (!generatedKeys.getString(1).equals("pending")){ 
-				return true;	
+			if (generatedKeys.first()) {
+				if (!generatedKeys.getString(1).equals("pending")){ 
+					return true;	
+				}
 			}
+			else throw new SQLException();
 
 			return false;
 
@@ -197,11 +188,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	@Override
 	public HTTPOptions getOptions(String id) throws SQLException {
-		
-		
-		System.out.println("WWWWWWWWWWWWWWWWW" + conn.isClosed());
-
-
+				
 		String sql = "SELECT PaymentType FROM Payment WHERE PaymentID = " + "'" + id + "'";
 
 		Statement stat = conn.createStatement();
@@ -221,7 +208,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 			options.add("GET");			
 		} 
 
-		stat.close();																		// ADDED
+		stat.close();																		
 
 		return options;
 	}
@@ -229,9 +216,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 	@Override
 	public boolean userIsCustomer(String key) throws SQLException {
 		
-		System.out.println("XXXXXXXXXXXXXXX" + conn.isClosed());
-
-
 		String sql = "SELECT CustomerKey FROM Customer WHERE CustomerKey = " + "'" + key + "'";
 		Statement stat = conn.createStatement();
 		ResultSet generatedKeys = stat.executeQuery(sql);
@@ -244,9 +228,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 	@Override
 	public boolean userIsBarista(String key) throws SQLException {
 		
-		System.out.println("YYYYYYYYYYYYYYYYY" + conn.isClosed());
-
-
 		String sql = "SELECT BaristaKey FROM Barista WHERE BaristaKey = " + "'" + key + "'";
 		Statement stat = conn.createStatement();
 		ResultSet generatedKeys = stat.executeQuery(sql);

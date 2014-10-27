@@ -50,7 +50,6 @@ public class CoffeeResource {
 		CoffeeOrderDAO coffeeDAO = new CoffeeOrderDAOImpl();
 		Response.Status  status = Response.Status.OK;
 		String error_msg = "";
-		System.out.println("heeeereeeeeeeeeee!");
 		CoffeeOrder order = null;
 		
 		// If the user is not a Customer or a Barista, they may NOT get a single order.
@@ -176,7 +175,6 @@ public class CoffeeResource {
 		// Only a Customer may delete an order
 		try {
 			if (!coffeeDAO.userIsCustomer(user)){
-//				coffeeDAO.closeConn();
 				stat = Response.Status.UNAUTHORIZED;
 				error = "An order may only be deleted by a Customer";
 			}

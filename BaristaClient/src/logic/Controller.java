@@ -66,7 +66,8 @@ public class Controller extends HttpServlet {
 		this.currOrders = new ArrayList<CoffeeOrder>();
 		this.service = this.client.resource(getBaseURI());
 //		getAllOpenOrders();
-		
+		System.setProperty("http.proxyHost", "http://ctat882.srvr");
+		System.setProperty("http.proxyPort", "8080");
 		
 		
 	}
@@ -90,6 +91,9 @@ public class Controller extends HttpServlet {
 		String orderID = "";
 		String msg = "";
 		String forwardPage;
+		
+		// Set auto-refresh
+		response.setIntHeader("Refresh", 10);
 		
 		if(request.getParameterMap().containsKey("action")) {
 				action = request.getParameter("action");
@@ -184,7 +188,7 @@ public class Controller extends HttpServlet {
 	
 	//fill the currOrders array list with latest orders.
 	private void getAllOpenOrders () {
-		System.out.println("getAllOrders");
+//		System.out.println("getAllOrders");
 		this.clientResp = this.service.path("rest").path("coffee").header("user", "barista-123").type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).get(ClientResponse.class);
 		if (this.clientResp.getStatus() != 404) {
 			String orderXML = this.clientResp.getEntity(String.class);
